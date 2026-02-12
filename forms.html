@@ -139,7 +139,7 @@
                 <div class="bg-white p-6 rounded-b-xl shadow-lg border-b-4 border-slate-800">
                     <div id="dyn-autofill-toast" class="hidden mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 text-blue-700 flex items-center">
                         <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>
-                        <span class="text-sm font-medium">Expiration dates have been auto-filled from the previous entry.</span>
+                        <span class="text-sm font-medium">Data auto-filled from previous entry.</span>
                     </div>
 
                     <form id="dynamicForm" class="space-y-6">
@@ -866,11 +866,13 @@
 
                         const lastData = snapshot.docs[0].data().data;
                         let filledCount = 0;
-                        const dateInputs = document.querySelectorAll('#dynamicForm input[type="date"]');
                         
-                        dateInputs.forEach(input => {
+                        // Select all inputs that might need autofilling (Date, Number, Text)
+                        const targetInputs = document.querySelectorAll('#dynamicForm input[type="date"], #dynamicForm input[type="number"], #dynamicForm input[type="text"]');
+                        
+                        targetInputs.forEach(input => {
                             const label = input.name.split('::')[1]; 
-                            if(label && /exp|valid|cycle|due/i.test(label) && lastData[label]) {
+                            if(label && /exp|valid|cycle|due|o2|#/i.test(label) && lastData[label]) {
                                 input.value = lastData[label];
                                 input.classList.add('autofilled-field');
                                 filledCount++;
